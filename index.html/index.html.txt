@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Cozy Calc</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #1a1a2e; 
+            color: #e94560; 
+            font-family: 'Press Start 2P', cursive; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px;
+            image-rendering: pixelated;
+        }
+        .container { 
+            background: #16213e; 
+            padding: 30px; 
+            border: 4px solid #e94560; 
+            box-shadow: 10px 10px 0px #0f3460; 
+            max-width: 450px; 
+            width: 100%; 
+            margin-bottom: 20px;
+        }
+        h1 { font-size: 14px; text-align: center; margin-bottom: 25px; line-height: 1.5; }
+        label { font-size: 8px; display: block; margin-top: 15px; color: #1a1a2e; background: #e94560; padding: 4px; width: fit-content; }
+        input, select, button { 
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 8px; 
+            background: #0f3460; 
+            border: 2px solid #e94560; 
+            color: white; 
+            font-family: 'Press Start 2P', cursive; 
+            font-size: 10px;
+            box-sizing: border-box;
+        }
+        button { 
+            background: #e94560; 
+            color: #1a1a2e; 
+            cursor: pointer; 
+            margin-top: 25px; 
+            box-shadow: 4px 4px 0px #000;
+            border: none;
+        }
+        button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000; }
+        #results { 
+            margin-top: 30px; 
+            display: none; 
+            border-top: 4px dashed #e94560; 
+            padding-top: 20px; 
+        }
+        .res-item { font-size: 8px; margin-bottom: 15px; text-align: center; line-height: 1.8; }
+        .val { color: #4ecca3; display: block; font-size: 14px; margin-top: 8px; }
+        
+        .spotify-box { 
+            width: 100%; 
+            max-width: 450px; 
+            border: 4px solid #1DB954; 
+            background: #000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>GEMINI FITNESS<br>STUDY ZONE v1.0</h1>
+        
+        <label>GENDER</label>
+        <select id="gender"><option value="male">MALE</option><option value="female">FEMALE</option></select>
+        
+        <label>AGE</label>
+        <input type="number" id="age" value="19">
+        
+        <label>WEIGHT (KG)</label>
+        <input type="number" id="weight" placeholder="e.g. 70">
+        
+        <label>HEIGHT (CM)</label>
+        <input type="number" id="height" placeholder="e.g. 175">
+        
+        <label>ACTIVITY LEVEL</label>
+        <select id="activity">
+            <option value="1.2">SEDENTARY</option>
+            <option value="1.375">LIGHT (1-2 DAYS)</option>
+            <option value="1.55">MODERATE (3-5 DAYS)</option>
+            <option value="1.725">HEAVY (6-7 DAYS)</option>
+        </select>
+        
+        <button onclick="calculate()">START ANALYSIS</button>
+
+        <div id="results">
+            <div class="res-item">TO MAINTAIN:<br><span id="maint" class="val">0</span> KCAL/DAY</div>
+            <div class="res-item">TO LOSE (-0.5KG):<br><span id="loss" class="val">0</span> KCAL/DAY</div>
+            <div class="res-item">TO GAIN (+0.5KG):<br><span id="gain" class="val">0</span> KCAL/DAY</div>
+        </div>
+    </div>
+
+    <div class="spotify-box">
+        <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DWWQRwui0ExYv" 
+        width="100%" height="152" frameBorder="0" allowfullscreen="" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+
+    <script>
+        function calculate() {
+            const g = document.getElementById('gender').value;
+            const a = parseFloat(document.getElementById('age').value);
+            const w = parseFloat(document.getElementById('weight').value);
+            const h = parseFloat(document.getElementById('height').value);
+            const f = parseFloat(document.getElementById('activity').value);
+            
+            if(!a || !w || !h) return alert("INPUT ERROR: FILL ALL FIELDS");
+
+            // Mifflin-St Jeor Formula
+            let bmr = (10 * w) + (6.25 * h) - (5 * a);
+            bmr = (g === 'male') ? bmr + 5 : bmr - 161;
+            
+            const tdee = Math.round(bmr * f);
+            
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('maint').innerText = tdee;
+            document.getElementById('loss').innerText = tdee - 500;
+            document.getElementById('gain').innerText = tdee + 500;
+        }
+    </script>
+</body>
+</html>
